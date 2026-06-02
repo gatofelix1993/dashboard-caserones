@@ -3,29 +3,8 @@
 // Historial mensual de inspecciones — pestaña en VistaInicio
 // ============================================================
 import { useMemo } from 'react';
-
-const ITEMS_INSP = ['polines','cinta','raspadores','protecciones','chutes','poleas','contrapeso','limpieza'];
-const ITEM_LABELS = {
-  polines:'Polines', cinta:'Cinta', raspadores:'Raspadores',
-  protecciones:'Protecciones', chutes:'Chutes', poleas:'Poleas',
-  contrapeso:'Contrapeso', limpieza:'Limpieza',
-};
-
-function estadoColor(e) {
-  if (e === 'critico') return '#e74c3c';
-  if (e === 'alerta')  return '#f4a700';
-  return '#2ecc71';
-}
-function estadoLabel(e) {
-  if (e === 'critico') return 'CRÍTICO';
-  if (e === 'alerta')  return 'ALERTA';
-  return 'OK';
-}
-function estadoChipClass(e) {
-  if (e === 'critico') return 'chip chip-rojo';
-  if (e === 'alerta')  return 'chip chip-amarillo';
-  return 'chip chip-verde';
-}
+import { ITEMS_INSP, ITEM_LABELS } from '../data/constants';
+import { estadoColor } from '../utils/status';
 
 // Genera un resumen de semana a partir de las correas actuales
 function generarResumenSemana(correas, semana, fecha) {

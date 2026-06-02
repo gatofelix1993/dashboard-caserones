@@ -4,10 +4,12 @@
 // ============================================================
 import { useMemo, useState } from 'react';
 import VistaHistorial from './VistaHistorial';
+import { getCorreaStatus } from '../utils/status';
 
 // ── Dibujo SVG de una correa transportadora ─────────────────
 function ConveyorSVG({ color = '#209eb0', id }) {
-  const seed = id ? id.charCodeAt(0) + id.charCodeAt(id.length - 1) : 42;
+  // seed se mantiene por si se necesita variación visual futura
+  // const seed = id ? id.charCodeAt(0) + id.charCodeAt(id.length - 1) : 42;
   return (
     <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg"
       style={{ width: '100%', height: '100%' }}>
@@ -33,14 +35,11 @@ function ConveyorSVG({ color = '#209eb0', id }) {
       {/* Polines de carga (estaciones: 3 polines c/u) */}
       {[55, 115, 175, 235].map((x, si) => (
         <g key={si}>
-          {/* polín izquierdo inclinado */}
           <rect x={x - 20} y="72" width="6" height="22" rx="3"
             fill={color} opacity="0.85"
             transform={`rotate(-20, ${x - 17}, 83)`}/>
-          {/* polín central */}
           <rect x={x - 3} y="68" width="6" height="24" rx="3"
             fill={color} opacity="0.95"/>
-          {/* polín derecho inclinado */}
           <rect x={x + 14} y="72" width="6" height="22" rx="3"
             fill={color} opacity="0.85"
             transform={`rotate(20, ${x + 17}, 83)`}/>
@@ -64,27 +63,19 @@ function ConveyorSVG({ color = '#209eb0', id }) {
       <circle cx="20" cy="82" r="2.5" fill="#374752"/>
 
       {/* Banda superior (cubierta) */}
-      <path d="M20 66 Q160 58 300 66" fill="none" stroke={color + '60'} strokeWidth="3" strokeDasharray="0"/>
+      <path d="M20 66 Q160 58 300 66" fill="none" stroke={color + '60'} strokeWidth="3"/>
 
       {/* Líneas de carga (simulan material) */}
-      <rect x="60" y="70" width="180" height="8" rx="2"
-        fill={color + '18'} stroke="none"/>
+      <rect x="60" y="70" width="180" height="8" rx="2" fill={color + '18'}/>
 
-      {/* Estructura lateral izquierda */}
+      {/* Estructura lateral */}
       <rect x="6" y="68" width="4" height="24" rx="1" fill="#374752"/>
-      {/* Estructura lateral derecha */}
       <rect x="310" y="68" width="4" height="24" rx="1" fill="#374752"/>
     </svg>
   );
 }
 
-// ── Semáforo global de una correa ───────────────────────────
-function getCorreaStatus(correa) {
-  const items = Object.values(correa.items);
-  if (items.some(i => i.estado === 'critico')) return 'critico';
-  if (items.some(i => i.estado === 'alerta'))  return 'alerta';
-  return 'ok';
-}
+// getCorreaStatus importado desde utils/status.js
 
 const STATUS_CONFIG = {
   critico: { label: 'CRÍTICO', color: '#c0392b', bg: 'rgba(192,57,43,0.15)', border: 'rgba(192,57,43,0.4)' },
@@ -92,7 +83,6 @@ const STATUS_CONFIG = {
   ok:      { label: 'NORMAL',  color: '#27ae60', bg: 'rgba(39,174,96,0.12)',  border: 'rgba(39,174,96,0.3)' },
 };
 
-// Agrupar correas por área
 function groupByArea(correas) {
   return correas.reduce((acc, c) => {
     if (!acc[c.area]) acc[c.area] = [];
@@ -105,7 +95,7 @@ export default function VistaInicio({ correas, onSelectCorrea }) {
   const areas = useMemo(() => groupByArea(correas), [correas]);
   const totalCriticos = correas.filter(c => getCorreaStatus(c) === 'critico').length;
   const totalAlertas  = correas.filter(c => getCorreaStatus(c) === 'alerta').length;
-  const [tabActiva, setTabActiva] = useState('correas'); // 'correas' | 'historial'
+  const [tabActiva, setTabActiva] = useState('correas');
 
   return (
     <div className="vista-inicio">
@@ -126,103 +116,93 @@ export default function VistaInicio({ correas, onSelectCorrea }) {
         </button>
       </div>
 
-      {/* ── Tab: Historial ── */}
+      {/* Tab: Historial */}
       {tabActiva === 'historial' && (
         <VistaHistorial correas={correas}/>
       )}
 
-      {/* ── Tab: Correas ── */}
+      {/* Tab: Correas */}
       {tabActiva === 'correas' && (<>
-      {/* Banner de estado global */}
-      <div className="inicio-banner">
-        <div className="inicio-banner-left">
-          <div className="inicio-banner-title">INSPECCIÓN CINTAS TRANSPORTADORAS</div>
-          <div className="inicio-banner-sub">Semana N°22 · 28 de mayo 2026 · {correas.length} correas monitoreadas</div>
-        </div>
-        <div className="inicio-banner-right">
-          {totalCriticos > 0 && (
-            <div className="inicio-stat critico">
-              <i className="bi bi-x-octagon-fill"/>{totalCriticos} Críticas
+        <div className="inicio-banner">
+          <div className="inicio-banner-left">
+            <div className="inicio-banner-title">INSPECCIÓN CINTAS TRANSPORTADORAS</div>
+            <div className="inicio-banner-sub">Semana N°22 · 28 de mayo 2026 · {correas.length} correas monitoreadas</div>
+          </div>
+          <div className="inicio-banner-right">
+            {totalCriticos > 0 && (
+              <div className="inicio-stat critico">
+                <i className="bi bi-x-octagon-fill"/>{totalCriticos} Críticas
+              </div>
+            )}
+            {totalAlertas > 0 && (
+              <div className="inicio-stat alerta">
+                <i className="bi bi-exclamation-triangle-fill"/>{totalAlertas} En alerta
+              </div>
+            )}
+            <div className="inicio-stat ok">
+              <i className="bi bi-check-circle-fill"/>{correas.length - totalCriticos - totalAlertas} Normales
             </div>
-          )}
-          {totalAlertas > 0 && (
-            <div className="inicio-stat alerta">
-              <i className="bi bi-exclamation-triangle-fill"/>{totalAlertas} En alerta
+          </div>
+        </div>
+
+        {/* Grilla por área */}
+        {Object.entries(areas).map(([area, lista]) => (
+          <div key={area} className="area-section">
+            <div className="area-header">
+              <div className="area-pill">ÁREA {area}</div>
+              <div className="area-line"/>
+              <span className="area-count">{lista.length} correas</span>
             </div>
-          )}
-          <div className="inicio-stat ok">
-            <i className="bi bi-check-circle-fill"/>{correas.length - totalCriticos - totalAlertas} Normales
-          </div>
-        </div>
-      </div>
+            <div className="correa-grid">
+              {lista.map(correa => {
+                const status = getCorreaStatus(correa);
+                const sc = STATUS_CONFIG[status];
+                const criticos = Object.values(correa.items).filter(i => i.estado === 'critico').length;
+                const alertas  = Object.values(correa.items).filter(i => i.estado === 'alerta').length;
 
-      {/* Grilla por área */}
-      {Object.entries(areas).map(([area, lista]) => (
-        <div key={area} className="area-section">
-          <div className="area-header">
-            <div className="area-pill">ÁREA {area}</div>
-            <div className="area-line"/>
-            <span className="area-count">{lista.length} correas</span>
-          </div>
-          <div className="correa-grid">
-            {lista.map(correa => {
-              const status = getCorreaStatus(correa);
-              const sc = STATUS_CONFIG[status];
-              const criticos = Object.values(correa.items).filter(i => i.estado === 'critico').length;
-              const alertas  = Object.values(correa.items).filter(i => i.estado === 'alerta').length;
-
-              return (
-                <button
-                  key={correa.id}
-                  className="correa-card"
-                  onClick={() => onSelectCorrea(correa)}
-                  style={{ '--card-color': correa.color, '--status-bg': sc.bg, '--status-border': sc.border }}
-                >
-                  {/* Status chip */}
-                  <div className="correa-card-status" style={{ background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color }}>
-                    <span className="status-dot" style={{ background: sc.color }}/>
-                    {sc.label}
-                  </div>
-
-                  {/* Dibujo SVG */}
-                  <div className="correa-card-svg">
-                    <ConveyorSVG color={correa.color} id={correa.id}/>
-                  </div>
-
-                  {/* Info */}
-                  <div className="correa-card-info">
-                    <div className="correa-card-codigo">{correa.codigo}</div>
-                    <div className="correa-card-nombre">{correa.nombre}</div>
-                    <div className="correa-card-desc">{correa.descripcion}</div>
-                  </div>
-
-                  {/* Badges de problemas */}
-                  <div className="correa-card-badges">
-                    {criticos > 0 && (
-                      <span className="badge-mini badge-crit-mini">
-                        <i className="bi bi-x-octagon-fill me-1"/>{criticos} crít.
+                return (
+                  <button
+                    key={correa.id}
+                    className="correa-card"
+                    onClick={() => onSelectCorrea(correa)}
+                    style={{ '--card-color': correa.color, '--status-bg': sc.bg, '--status-border': sc.border }}
+                  >
+                    <div className="correa-card-status" style={{ background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color }}>
+                      <span className="status-dot" style={{ background: sc.color }}/>
+                      {sc.label}
+                    </div>
+                    <div className="correa-card-svg">
+                      <ConveyorSVG color={correa.color} id={correa.id}/>
+                    </div>
+                    <div className="correa-card-info">
+                      <div className="correa-card-codigo">{correa.codigo}</div>
+                      <div className="correa-card-nombre">{correa.nombre}</div>
+                      <div className="correa-card-desc">{correa.descripcion}</div>
+                    </div>
+                    <div className="correa-card-badges">
+                      {criticos > 0 && (
+                        <span className="badge-mini badge-crit-mini">
+                          <i className="bi bi-x-octagon-fill me-1"/>{criticos} crít.
+                        </span>
+                      )}
+                      {alertas > 0 && (
+                        <span className="badge-mini badge-alert-mini">
+                          <i className="bi bi-exclamation-triangle me-1"/>{alertas} alert.
+                        </span>
+                      )}
+                      <span className="badge-mini badge-est-mini">
+                        {correa.numEstaciones} est.
                       </span>
-                    )}
-                    {alertas > 0 && (
-                      <span className="badge-mini badge-alert-mini">
-                        <i className="bi bi-exclamation-triangle me-1"/>{alertas} alert.
-                      </span>
-                    )}
-                    <span className="badge-mini badge-est-mini">
-                      {correa.numEstaciones} est.
-                    </span>
-                  </div>
-
-                  {/* Hover arrow */}
-                  <div className="correa-card-arrow">
-                    <i className="bi bi-arrow-right-circle"/>
-                  </div>
-                </button>
-              );
-            })}
+                    </div>
+                    <div className="correa-card-arrow">
+                      <i className="bi bi-arrow-right-circle"/>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
       </>)}
     </div>
   );

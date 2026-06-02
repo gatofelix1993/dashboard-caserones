@@ -36,17 +36,7 @@ export default function Topbar({ title, totalPolines, onMenuToggle, hideHamburge
           </button>
         )}
 
-        {/* Logo Codelco */}
-        <CodelcoLogo />
 
-        {/* Texto brand */}
-        <div className="topbar-brand">
-          <span className="topbar-brand-codelco">CODELCO</span>
-          <span className="topbar-brand-sep">|</span>
-          <span className="topbar-brand-division">Caserones</span>
-        </div>
-
-        <div className="topbar-divider" />
 
         <span className="topbar-title">{title}</span>
         <span className="tag-badge topbar-badge-hidden">{totalPolines} POLINES</span>

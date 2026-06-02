@@ -5,20 +5,12 @@
 // ============================================================
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
+import { ITEMS_CONFIG } from '../data/constants';
+import { estadoColor } from '../utils/status';
 
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
-// ── Constantes ────────────────────────────────────────────────
-const ITEMS_CONFIG = [
-  { key: 'polines',      label: 'Estaciones de Polines', icon: 'bi-gear-wide'       },
-  { key: 'cinta',        label: 'Cinta',                  icon: 'bi-arrow-left-right' },
-  { key: 'raspadores',   label: 'Raspadores',             icon: 'bi-tools'            },
-  { key: 'protecciones', label: 'Protecciones',           icon: 'bi-shield-check'     },
-  { key: 'chutes',       label: 'Chutes',                 icon: 'bi-funnel'           },
-  { key: 'poleas',       label: 'Poleas',                 icon: 'bi-circle'           },
-  { key: 'contrapeso',   label: 'Contrapeso / Tensor',    icon: 'bi-arrows-vertical'  },
-  { key: 'limpieza',     label: 'Limpieza / Aseo',        icon: 'bi-brush'            },
-];
+// ITEMS_CONFIG importado desde data/constants.js
 
 const EC = {
   ok:      { label: 'OK',      color: '#2ecc71', icon: 'bi-check-circle-fill',         bg: 'rgba(46,204,113,0.15)',  border: 'rgba(46,204,113,0.35)' },

@@ -4,25 +4,8 @@
 // Lee columnas: codigo, area, responsable, fecha, item, estado, notas
 // ============================================================
 import { useState, useRef, useCallback } from 'react';
-
-const COLUMNAS_ESPERADAS = [
-  { key: 'codigo',       label: 'codigo',       desc: 'Ej: 2200-FE-002' },
-  { key: 'area',         label: 'area',         desc: 'Ej: 2200' },
-  { key: 'responsable',  label: 'responsable',  desc: 'Ej: P. Araya' },
-  { key: 'fecha',        label: 'fecha',        desc: 'Ej: 2026-05-28' },
-  { key: 'semana',       label: 'semana',       desc: 'Ej: 22' },
-  { key: 'polines',      label: 'polines',      desc: 'ok | alerta | critico' },
-  { key: 'cinta',        label: 'cinta',        desc: 'ok | alerta | critico' },
-  { key: 'raspadores',   label: 'raspadores',   desc: 'ok | alerta | critico' },
-  { key: 'protecciones', label: 'protecciones', desc: 'ok | alerta | critico' },
-  { key: 'chutes',       label: 'chutes',       desc: 'ok | alerta | critico' },
-  { key: 'poleas',       label: 'poleas',       desc: 'ok | alerta | critico' },
-  { key: 'contrapeso',   label: 'contrapeso',   desc: 'ok | alerta | critico' },
-  { key: 'limpieza',     label: 'limpieza',     desc: 'ok | alerta | critico' },
-  { key: 'notas',        label: 'notas',        desc: 'Observaciones generales (opcional)' },
-];
-
-const ITEMS_INSP = ['polines','cinta','raspadores','protecciones','chutes','poleas','contrapeso','limpieza'];
+import { ITEMS_INSP, COLUMNAS_ESPERADAS } from '../data/constants';
+import { estadoColor } from '../utils/status';
 
 // Carga SheetJS desde CDN si no está disponible globalmente
 function loadSheetJS() {
@@ -142,9 +125,7 @@ export default function ModalDatosEntrada({ onClose, onImportar }) {
     onClose();
   };
 
-  // ── Estado por ítem de una fila
-  const estadoColor = (e) => e === 'critico' ? '#e74c3c' : e === 'alerta' ? '#f4a700' : '#2ecc71';
-  const estadoLabel = (e) => e === 'critico' ? 'CRÍT' : e === 'alerta' ? 'ALRT' : 'OK';
+  // ── Estado por ítem de una fila (estadoColor importado desde utils/status.js)
 
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
