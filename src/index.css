@@ -1,0 +1,78 @@
+/* ============================================================
+   index.css — SCADA-MINE · Caserones · Codelco v4
+   Mayor contraste de textos + paleta Codelco reforzada
+   ============================================================ */
+
+:root {
+  /* ── FONDOS Codelco-gris #374752 ── */
+  --bg-primary:    #181f25;
+  --bg-secondary:  #1f2830;
+  --bg-card:       #273038;
+  --bg-card-hover: #2f3a45;
+  --bg-card-deep:  #1b2329;
+
+  /* ── BORDES ── */
+  --border-color:  #38495a;
+  --border-light:  #4a5e6d;
+
+  /* ── CODELCO PRIMARIOS ── */
+  --codelco-cobre:    #bb5726;
+  --codelco-turquesa: #209eb0;
+  --codelco-amarillo: #f4a700;
+  --codelco-naranja:  #e96c28;
+
+  /* ── CODELCO SECUNDARIOS ── */
+  --codelco-rojo:   #76151f;
+  --codelco-gris:   #374752;
+  --codelco-arena:  #c8b499;
+  --codelco-verde:  #004c4e;
+  --codelco-cafe:   #6e4d48;
+  --codelco-azul:   #2c73b5;
+
+  /* ── ALIAS FUNCIONALES ── */
+  --accent-blue:   var(--codelco-turquesa);
+  --accent-orange: var(--codelco-cobre);
+  --accent-cyan:   #3ac8d8;
+  --accent-purple: var(--codelco-azul);
+
+  /* ── SEMÁFORO ── */
+  --green:  #2ecc71;
+  --yellow: #f4a700;
+  --orange: #e96c28;
+  --red:    #e74c3c;
+
+  /* ── TEXTO — contraste aumentado ──
+     Todos los textos más claros / más opacos para legibilidad */
+  --text-primary:   #f0f4f8;   /* casi blanco, máximo contraste    */
+  --text-secondary: #b8ccd8;   /* gris claro legible               */
+  --text-muted:     #7a96aa;   /* etiquetas secundarias            */
+  --text-label:     #9fbccc;   /* labels de formularios/paneles    */
+
+  /* ── TIPOGRAFÍAS ── */
+  --font-title: 'Orbitron', monospace;
+  --font-ui:    'Rajdhani', sans-serif;
+  --font-mono:  'Share Tech Mono', monospace;
+
+  /* ── LAYOUT ── */
+  --sidebar-w: 260px;
+  --topbar-h:  60px;
+}
+
+@media (max-width: 767px) { :root { --topbar-h: 52px; } }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--codelco-turquesa); }

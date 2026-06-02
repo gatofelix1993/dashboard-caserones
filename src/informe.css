@@ -1,0 +1,496 @@
+/* ============================================================
+   informe.css — Estilos del GeneradorInforme
+   Formato idéntico al PDF oficial Caserones · Lundin Mining
+   Semana N°22 — slides 16:9 (1456 × 818px ~ A4 landscape)
+   ============================================================ */
+
+/* ── Variables de color ─────────────────────────────────────── */
+:root {
+  --inf-bg-portada:    #0a1a2a;
+  --inf-bg-rajo:       #1a2b3c;
+  --inf-bg-blanco:     #ffffff;
+  --inf-bg-gris:       #f5f5f5;
+  --inf-rojo-barra:    #8b1a22;
+  --inf-texto-dark:    #1a1a1a;
+  --inf-texto-gris:    #555555;
+  --inf-turquesa:      #209eb0;
+  --inf-slide-w:       1120px;
+  --inf-slide-h:       630px;
+}
+
+/* ── Overlay pantalla completa ──────────────────────────────── */
+.inf-overlay {
+  position: fixed;
+  inset: 0;
+  background: #111;
+  z-index: 9999;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Barra de control (no se imprime) ──────────────────────── */
+.inf-control-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  width: 100%;
+  background: #1f2830;
+  border-bottom: 2px solid #bb5726;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  gap: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.inf-control-info {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  color: #b8ccd8;
+  letter-spacing: 0.5px;
+}
+.inf-btn-close {
+  background: rgba(231,76,60,0.15);
+  border: 1px solid rgba(231,76,60,0.4);
+  color: #e74c3c;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all .2s;
+}
+.inf-btn-close:hover { background: rgba(231,76,60,0.3); }
+.inf-btn-print {
+  background: #bb5726;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 22px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background .2s;
+}
+.inf-btn-print:hover { background: #d4632a; }
+
+/* ── Documento ──────────────────────────────────────────────── */
+.inf-documento {
+  width: var(--inf-slide-w);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 0 60px 0;
+}
+
+/* ── Slide base ─────────────────────────────────────────────── */
+.inf-slide {
+  width: var(--inf-slide-w);
+  height: var(--inf-slide-h);
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  flex-shrink: 0;
+  page-break-after: always;
+  break-after: page;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE PORTADA GENERAL
+══════════════════════════════════════════════════════════════ */
+.inf-slide--portada {
+  background: var(--inf-bg-portada);
+}
+.inf-bg-overlay--portada {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(32,158,176,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 40%, rgba(187,87,38,0.08) 0%, transparent 60%),
+    linear-gradient(135deg, #0a1a2a 0%, #152535 50%, #0a1420 100%);
+  /* Simula la foto de la mina con un patrón sutil */
+}
+.inf-portada-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.inf-portada-titulo {
+  margin-top: 32px;
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 1px;
+}
+.inf-portada-semana {
+  margin-top: 10px;
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-size: 20px;
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.inf-portada-fecha {
+  margin-top: 6px;
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-size: 20px;
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE PORTADA CORREA
+══════════════════════════════════════════════════════════════ */
+.inf-slide--correa-portada {
+  background: #1a2b40;
+}
+.inf-bg-overlay--correa {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a2b40 0%, #243550 40%, #1a2540 100%);
+  opacity: 0.95;
+}
+.inf-correa-portada-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.inf-correa-portada-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 60px;
+}
+.inf-correa-portada-sep {
+  width: 2px;
+  height: 160px;
+  background: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+}
+.inf-correa-portada-right {
+  padding-left: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.inf-correa-portada-codigo {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 900;
+  font-size: 52px;
+  color: #ffffff;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.inf-correa-portada-subtitulo {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 1px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE ACTIVIDADES RELEVANTES
+══════════════════════════════════════════════════════════════ */
+.inf-slide--actividades {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+.inf-act-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 32px 48px 0 48px;
+}
+.inf-act-header-right {
+  padding-top: 4px;
+  opacity: 0.9;
+  /* Logo en modo claro → texto oscuro */
+  filter: invert(1) sepia(0.3) hue-rotate(180deg) saturate(0.3) brightness(0.3);
+}
+.inf-act-subtitulo {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.inf-act-titulo {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+.inf-act-codigo {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #1a1a1a;
+}
+.inf-act-sep {
+  height: 2px;
+  background: var(--inf-rojo-barra);
+  margin: 16px 48px 0 48px;
+}
+.inf-act-items {
+  flex: 1;
+  padding: 20px 48px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.inf-act-item {
+  display: grid;
+  grid-template-columns: 24px 200px auto 1fr;
+  align-items: baseline;
+  gap: 8px 12px;
+  line-height: 1.5;
+}
+.inf-act-item-num {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1a1a1a;
+  text-align: right;
+}
+.inf-act-item-label {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1a1a1a;
+}
+.inf-act-item-estado {
+  display: flex;
+  align-items: center;
+}
+.inf-act-estado-badge {
+  font-family: 'Arial', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 1px 8px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.inf-act-item-notas {
+  font-family: 'Arial', sans-serif;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.5;
+}
+.inf-act-notas-ok {
+  color: #2ecc71;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE REGISTRO FOTOGRÁFICO
+══════════════════════════════════════════════════════════════ */
+.inf-slide--fotos {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+.inf-fotos-header {
+  padding: 32px 48px 0 48px;
+}
+.inf-fotos-titulo {
+  font-family: 'Arial Black', 'Arial', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: #1a1a1a;
+  letter-spacing: 0.3px;
+}
+.inf-fotos-sep {
+  height: 2px;
+  background: var(--inf-rojo-barra);
+  margin-top: 12px;
+}
+.inf-fotos-grid {
+  flex: 1;
+  display: grid;
+  gap: 16px;
+  padding: 24px 48px 32px 48px;
+  align-items: center;
+  justify-items: center;
+}
+.inf-foto-cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #f0f0f0;
+  max-height: 460px;
+}
+.inf-foto-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SLIDE CIERRE / CONTRAPORTADA
+══════════════════════════════════════════════════════════════ */
+.inf-slide--cierre {
+  background: #1a7a8a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inf-bg-overlay--cierre {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a7a8a 0%, #0e6070 50%, #154a55 100%);
+}
+.inf-cierre-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 40px;
+}
+.inf-cierre-valores {
+  margin-top: 32px;
+  text-align: center;
+}
+.inf-cierre-lema {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 3px;
+}
+.inf-cierre-ser {
+  font-family: 'Rajdhani', 'Arial', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: #ffffff;
+  letter-spacing: 2px;
+}
+.inf-cierre-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.inf-cierre-chip {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-family: 'Arial', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.inf-cierre-tagline {
+  margin-top: 20px;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.inf-cierre-tagline strong {
+  color: #ffffff;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PRINT: CSS específico para cuando se imprime / se guarda PDF
+══════════════════════════════════════════════════════════════ */
+@media print {
+
+  /* Ocultar toda la app y solo mostrar el informe */
+  body > * { display: none !important; }
+  body > #informe-portal,
+  #informe-portal,
+  .inf-overlay { display: block !important; }
+
+  /* Ocultar barra de control */
+  #inf-control-bar,
+  .inf-control-bar { display: none !important; }
+
+  /* Reset de layout */
+  .inf-overlay {
+    position: static !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+  .inf-documento {
+    width: 100% !important;
+    padding: 0 !important;
+    gap: 0 !important;
+  }
+
+  /* Configuración de página A4 apaisado */
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  /* Cada slide ocupa exactamente una página */
+  .inf-slide {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Asegurar que el fondo se imprime */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* ── Responsive: scroll horizontal en pantallas pequeñas ─── */
+@media screen and (max-width: 1180px) {
+  .inf-documento {
+    width: 100%;
+    min-width: 320px;
+    overflow-x: auto;
+  }
+  .inf-slide {
+    width: min(var(--inf-slide-w), 98vw);
+    height: auto;
+    min-height: 300px;
+    aspect-ratio: 16/9;
+  }
+}
