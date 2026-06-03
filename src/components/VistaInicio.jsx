@@ -13,20 +13,20 @@ function ConveyorSVG({ color = '#209eb0', id }) {
   return (
     <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg"
       style={{ width: '100%', height: '100%' }}>
-      {/* Fondo oscuro */}
-      <rect width="320" height="140" fill="#1a2028" rx="4"/>
+      {/* Fondo claro gris */}
+      <rect width="320" height="140" fill="#eaeff5" rx="4"/>
 
       {/* Estructura soporte */}
       {[40, 80, 120, 160, 200, 240, 280].map((x, i) => (
         <g key={i}>
-          <line x1={x} y1="90" x2={x - 10} y2="130" stroke="#3a4a57" strokeWidth="2"/>
-          <line x1={x} y1="90" x2={x + 10} y2="130" stroke="#3a4a57" strokeWidth="2"/>
-          <line x1={x - 12} y1="130" x2={x + 12} y2="130" stroke="#3a4a57" strokeWidth="1.5"/>
+          <line x1={x} y1="90" x2={x - 10} y2="130" stroke="#b0bcc8" strokeWidth="2"/>
+          <line x1={x} y1="90" x2={x + 10} y2="130" stroke="#b0bcc8" strokeWidth="2"/>
+          <line x1={x - 12} y1="130" x2={x + 12} y2="130" stroke="#b0bcc8" strokeWidth="1.5"/>
         </g>
       ))}
 
       {/* Banda transportadora (retorno) */}
-      <rect x="20" y="94" width="280" height="6" rx="3" fill="#2a3540" stroke="#3a4a57" strokeWidth="1"/>
+      <rect x="20" y="94" width="280" height="6" rx="3" fill="#d5dce5" stroke="#b0bcc8" strokeWidth="1"/>
 
       {/* Banda transportadora (carga) */}
       <path d="M20 78 Q160 70 300 78 L300 86 Q160 94 20 86 Z"
@@ -48,19 +48,19 @@ function ConveyorSVG({ color = '#209eb0', id }) {
 
       {/* Polines de retorno */}
       {[70, 160, 250].map((x, i) => (
-        <rect key={i} x={x - 3} y="92" width="6" height="10" rx="3"
-          fill="#374752" stroke="#4a5e6d" strokeWidth="0.8"/>
+        <rect x={x - 3} y="92" width="6" height="10" rx="3"
+        fill="#c0ccd6" stroke="#a8b8c4" strokeWidth="0.8"/>
       ))}
 
       {/* Polea motriz derecha */}
-      <circle cx="300" cy="82" r="16" fill="#2b3640" stroke={color} strokeWidth="2"/>
+      <circle cx="300" cy="82" r="16" fill="#d5dce5" stroke={color} strokeWidth="2"/>
       <circle cx="300" cy="82" r="9" fill={color + '40'} stroke={color} strokeWidth="1.5"/>
       <circle cx="300" cy="82" r="3" fill={color}/>
 
       {/* Polea cola izquierda */}
-      <circle cx="20" cy="82" r="14" fill="#2b3640" stroke="#4a5e6d" strokeWidth="1.5"/>
-      <circle cx="20" cy="82" r="7" fill="#374752" stroke="#4a5e6d" strokeWidth="1"/>
-      <circle cx="20" cy="82" r="2.5" fill="#374752"/>
+      <circle cx="20" cy="82" r="14" fill="#d5dce5" stroke="#b0bcc8" strokeWidth="1.5"/>
+      <circle cx="20" cy="82" r="7" fill="#c5d0d8" stroke="#b0bcc8" strokeWidth="1"/>
+      <circle cx="20" cy="82" r="2.5" fill="#a0b0bc"/>
 
       {/* Banda superior (cubierta) */}
       <path d="M20 66 Q160 58 300 66" fill="none" stroke={color + '60'} strokeWidth="3"/>
@@ -69,8 +69,8 @@ function ConveyorSVG({ color = '#209eb0', id }) {
       <rect x="60" y="70" width="180" height="8" rx="2" fill={color + '18'}/>
 
       {/* Estructura lateral */}
-      <rect x="6" y="68" width="4" height="24" rx="1" fill="#374752"/>
-      <rect x="310" y="68" width="4" height="24" rx="1" fill="#374752"/>
+      <rect x="6" y="68" width="4" height="24" rx="1" fill="#c0ccd6"/>
+      <rect x="310" y="68" width="4" height="24" rx="1" fill="#c0ccd6"/>
     </svg>
   );
 }
@@ -99,6 +99,60 @@ export default function VistaInicio({ correas, onSelectCorrea }) {
 
   return (
     <div className="vista-inicio">
+
+      {/* ── Watermark logo Lundin Mining Caserones ── */}
+      <div className="vi-watermark" aria-hidden="true">
+        <svg viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg" className="vi-watermark-svg">
+
+          {/* Isotipo Lundin Mining 2026 — paleta azul Caserones */}
+          <polygon
+            points="0,0 110,0 160,50 160,200 0,200"
+            fill="#0d2240"
+          />
+          <polygon
+            points="110,0 185,0 185,75"
+            fill="#1e6fa5"
+            opacity="0.85"
+          />
+          {/* Franja diagonal interior */}
+          <polygon
+            points="18,0 65,0 115,50 68,50"
+            fill="#2a90d4"
+            opacity="0.25"
+          />
+
+          {/* Texto LUNDIN MINING */}
+          <text
+            x="205" y="90"
+            fontFamily="Arial, sans-serif"
+            fontWeight="700"
+            fontSize="52"
+            letterSpacing="2"
+            fill="#0d2240"
+          >LUNDIN</text>
+          <text
+            x="205" y="148"
+            fontFamily="Arial, sans-serif"
+            fontWeight="400"
+            fontSize="38"
+            letterSpacing="6"
+            fill="#1e6fa5"
+          >MINING</text>
+
+          {/* Línea separadora */}
+          <line x1="205" y1="162" x2="510" y2="162" stroke="#1e6fa5" strokeWidth="2" opacity="0.7"/>
+
+          {/* Texto CASERONES */}
+          <text
+            x="205" y="210"
+            fontFamily="Arial, sans-serif"
+            fontWeight="700"
+            fontSize="46"
+            letterSpacing="4"
+            fill="#0d2240"
+          >CASERONES</text>
+        </svg>
+      </div>
       {/* Tabs de navegación */}
       <div className="inicio-tabs">
         <button

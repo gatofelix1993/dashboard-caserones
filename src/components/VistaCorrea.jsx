@@ -59,7 +59,7 @@ function PolinesResumenSVG({ estaciones = [], color = '#209eb0' }) {
       style={{ width: '100%', height: '100%', display: 'block' }}
     >
       {/* Fondo */}
-      <rect width={W} height={H} fill="#1b2329" rx="6"/>
+      <rect width={W} height={H} fill="#eaeff5" rx="6"/>
 
       {/* Etiquetas de fila a la izquierda */}
       {ROWS.map(row => (
@@ -74,18 +74,18 @@ function PolinesResumenSVG({ estaciones = [], color = '#209eb0' }) {
         x={PAD_X} y={ROWS[0].cy - R}
         width={usable} height={ROWS[2].cy - ROWS[0].cy + R * 2}
         rx="4"
-        fill={color + '11'} stroke={color + '33'} strokeWidth="1"
+        fill={color + '08'} stroke={color + '22'} strokeWidth="1"
       />
 
       {/* Banda retorno debajo */}
       <rect x={PAD_X} y={ROWS[2].cy + R + 6} width={usable} height="5" rx="2"
-        fill="#273038" stroke="#38495a" strokeWidth="1"/>
+        fill="#d5dce5" stroke="#b8c4cc" strokeWidth="1"/>
 
       {/* Poleas extremos (por la fila CEN) */}
       <circle cx={PAD_X}          cy={ROWS[1].cy} r="16"
-        fill="#2f3a45" stroke={color + '77'} strokeWidth="2"/>
+        fill="#d5dce5" stroke={color + '77'} strokeWidth="2"/>
       <circle cx={PAD_X + usable} cy={ROWS[1].cy} r="16"
-        fill="#2f3a45" stroke={color + '77'} strokeWidth="2"/>
+        fill="#d5dce5" stroke={color + '77'} strokeWidth="2"/>
 
       {/* Polines: 3 por estación */}
       {visible.map((est, i) => {
@@ -101,7 +101,7 @@ function PolinesResumenSVG({ estaciones = [], color = '#209eb0' }) {
             <line
               x1={cx} y1={ROWS[0].cy}
               x2={cx} y2={ROWS[2].cy}
-              stroke="#38495a" strokeWidth="1"
+              stroke="#b8c4cc" strokeWidth="1"
             />
             {/* Círculo por cada polín */}
             {polines.map(({ row, data }) => (
@@ -174,7 +174,7 @@ function ItemsDonut({ items }) {
           legend: {
             position: 'bottom',
             labels: {
-              color: '#b8ccd8',
+              color: '#3a4f63',
               font: { family: "'Share Tech Mono', monospace", size: 10 },
               padding: 8, boxWidth: 10,
             },
@@ -200,10 +200,10 @@ function ItemsDonut({ items }) {
         position: 'absolute', top: '38%', left: '50%', transform: 'translate(-50%,-50%)',
         textAlign: 'center', pointerEvents: 'none',
       }}>
-        <div style={{ fontFamily: 'var(--font-title)', fontSize: 20, fontWeight: 700, color: '#f0f4f8', lineHeight: 1 }}>
+        <div style={{ fontFamily: 'var(--font-title)', fontSize: 20, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>
           {oks}/{total}
         </div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: '#7a96aa', marginTop: 2 }}>OK</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--text-muted)', marginTop: 2 }}>OK</div>
       </div>
     </div>
   );
@@ -333,9 +333,11 @@ function ItemInspeccion({ itemKey, config, data, correa, onFotoAdd, onNotaChange
 }
 
 // ── Vista principal ───────────────────────────────────────────
-export default function VistaCorrea({ correa, onBack }) {
+export default function VistaCorrea({ correa, onBack, onUpdate, onNuevaInspeccion, onInformeUnitario }) {
   const [items, setItems] = useState(() => ({ ...correa.items }));
+  const [historialAbierto, setHistorialAbierto] = useState(null); // inspeccion del historial en vista detalle
 
+  const historial = correa.historial || [];
   const allFotosLoaded = Object.values(items).every(i => i.fotos.length > 0);
   const criticos = Object.values(items).filter(i => i.estado === 'critico').length;
   const alertas  = Object.values(items).filter(i => i.estado === 'alerta').length;
@@ -431,24 +433,14 @@ export default function VistaCorrea({ correa, onBack }) {
             ))}
           </div>
 
-          {/* Botón informe */}
+          {/* Boton Ingresar Datos + Nueva Inspeccion */}
           <div className="informe-btn-area">
-            {!allFotosLoaded && (
-              <div className="informe-warning">
-                <i className="bi bi-info-circle me-2"/>
-                El informe estará disponible cuando todos los ítems tengan al menos una fotografía.&nbsp;
-                <strong style={{ color: '#209eb0' }}>
-                  {Object.values(items).filter(i => i.fotos.length > 0).length}/{ITEMS_CONFIG.length} completados
-                </strong>
-              </div>
-            )}
             <button
-              className={`btn-informe-unitario ${allFotosLoaded ? 'btn-informe-unitario--ready' : 'btn-informe-unitario--disabled'}`}
-              onClick={allFotosLoaded ? () => window.print() : undefined}
-              disabled={!allFotosLoaded}
+              className="btn-nueva-inspeccion"
+              onClick={onNuevaInspeccion}
             >
-              <i className="bi bi-file-earmark-pdf me-2"/>
-              Generar Informe Unitario — {correa.codigo}
+              <i className="bi bi-pencil-square me-2"/>
+              Ingresar Datos
             </button>
           </div>
         </div>

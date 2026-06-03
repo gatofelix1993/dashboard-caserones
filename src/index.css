@@ -1,52 +1,60 @@
 /* ============================================================
-   index.css — SCADA-MINE · Caserones · Codelco v4
-   Mayor contraste de textos + paleta Codelco reforzada
+   index.css — SCADA-MINE · Caserones · Lundin Mining
+   Paleta clara alineada al sitio caserones.cl 2026
+   Fondo blanco / gris claro + topbar azul marino + acentos cobre/rojo
    ============================================================ */
 
 :root {
-  /* ── FONDOS Codelco-gris #374752 ── */
-  --bg-primary:    #181f25;
-  --bg-secondary:  #1f2830;
-  --bg-card:       #273038;
-  --bg-card-hover: #2f3a45;
-  --bg-card-deep:  #1b2329;
+  /* ── FONDOS — Claros, como el sitio oficial caserones.cl ── */
+  --bg-primary:    #f2f4f7;   /* gris claro, fondo raíz de la app      */
+  --bg-secondary:  #e8ecf1;   /* segundo nivel, sidebars, paneles       */
+  --bg-card:       #ffffff;   /* tarjetas principales — blanco puro     */
+  --bg-card-hover: #f0f4f8;   /* hover de tarjetas                      */
+  --bg-card-deep:  #eaeff5;   /* zonas hundidas, inputs, zonas internas */
 
-  /* ── BORDES ── */
-  --border-color:  #38495a;
-  --border-light:  #4a5e6d;
+  /* ── BORDES — Grises suaves ── */
+  --border-color:  #cdd5df;
+  --border-light:  #dde3ec;
 
-  /* ── CODELCO PRIMARIOS ── */
-  --codelco-cobre:    #bb5726;
-  --codelco-turquesa: #209eb0;
-  --codelco-amarillo: #f4a700;
-  --codelco-naranja:  #e96c28;
+  /* ── TOPBAR / NAV — Azul marino oscuro (header del sitio real) ── */
+  --topbar-bg:     #0d2240;   /* azul marino oscuro, igual al nav real  */
+  --topbar-border: #c0272d;   /* línea roja Lundin bajo el topbar       */
 
-  /* ── CODELCO SECUNDARIOS ── */
-  --codelco-rojo:   #76151f;
-  --codelco-gris:   #374752;
-  --codelco-arena:  #c8b499;
-  --codelco-verde:  #004c4e;
-  --codelco-cafe:   #6e4d48;
-  --codelco-azul:   #2c73b5;
+  /* ── CASERONES PRIMARIOS ── */
+  --cas-rojo:      #c0272d;   /* rojo Lundin Mining — accion primaria   */
+  --cas-rojo-dark: #941f24;   /* hover rojo                             */
+  --cas-rojo-soft: #e8353c;   /* variante brillante                     */
+
+  --cas-cobre:     #c47a2e;   /* cobre mineral — acento brand           */
+  --cas-cobre-dark:#9a5e1f;   /* cobre profundo                         */
+  --cas-cobre-soft:#d9891a;   /* cobre iluminado                        */
+
+  --cas-azul:      #1e6fa5;   /* azul Caserones — links, acento         */
+  --cas-azul-light:#2a90d4;   /* azul brillante                         */
+  --cas-azul-deep: #14507a;   /* azul oscuro complementario             */
+
+  --cas-arena:     #b8a48a;   /* arena andina — decorativo              */
+  --cas-tierra:    #7a6048;   /* tierra oscura                          */
+  --cas-gris:      #5a6a7a;   /* gris azulado estructural               */
+  --cas-pizarra:   #374552;   /* pizarra                                */
 
   /* ── ALIAS FUNCIONALES ── */
-  --accent-blue:   var(--codelco-turquesa);
-  --accent-orange: var(--codelco-cobre);
-  --accent-cyan:   #3ac8d8;
-  --accent-purple: var(--codelco-azul);
+  --accent-primary:  var(--cas-rojo);
+  --accent-secondary:var(--cas-cobre);
+  --accent-blue:     var(--cas-azul-light);
+  --accent-cyan:     #1a90b0;
 
   /* ── SEMÁFORO ── */
-  --green:  #2ecc71;
-  --yellow: #f4a700;
-  --orange: #e96c28;
-  --red:    #e74c3c;
+  --green:  #1e8c4a;
+  --yellow: #c98b00;
+  --orange: #bf5010;
+  --red:    #c0272d;
 
-  /* ── TEXTO — contraste aumentado ──
-     Todos los textos más claros / más opacos para legibilidad */
-  --text-primary:   #f0f4f8;   /* casi blanco, máximo contraste    */
-  --text-secondary: #b8ccd8;   /* gris claro legible               */
-  --text-muted:     #7a96aa;   /* etiquetas secundarias            */
-  --text-label:     #9fbccc;   /* labels de formularios/paneles    */
+  /* ── TEXTO — Oscuro sobre fondos claros ── */
+  --text-primary:   #1a2533;   /* casi negro azulado, máximo contraste  */
+  --text-secondary: #3a4f63;   /* gris oscuro legible                   */
+  --text-muted:     #6a7e90;   /* texto apagado, metadatos              */
+  --text-label:     #5a7080;   /* labels de panel                       */
 
   /* ── TIPOGRAFÍAS ── */
   --font-title: 'Orbitron', monospace;
@@ -55,10 +63,10 @@
 
   /* ── LAYOUT ── */
   --sidebar-w: 260px;
-  --topbar-h:  60px;
+  --topbar-h:  68px;
 }
 
-@media (max-width: 767px) { :root { --topbar-h: 52px; } }
+@media (max-width: 767px) { :root { --topbar-h: 58px; } }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body, #root { height: 100%; }
@@ -67,12 +75,12 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-ui);
-  font-size: 15px;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
 ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--codelco-turquesa); }
+::-webkit-scrollbar-thumb:hover { background: var(--cas-rojo); }
