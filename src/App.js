@@ -1,6 +1,6 @@
 // ============================================================
 // App.js - SCADA-MINE Caserones - Lundin Mining v5
-// Flujo: Inicio -> Formulario -> Dashboard (con historial)
+// Flujo: Login -> (Inspector: Inspección) | (Gerente: KPIs)
 // ============================================================
 import { useState, useCallback } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,29 +9,35 @@ import './App.css';
 import './informe.css';
 
 import { INITIAL_DATA, INITIAL_CONFIG } from './data/data';
+import Login                 from './components/Login';
 import Topbar                from './components/Topbar';
 import VistaInicio           from './components/VistaInicio';
 import VistaCorrea           from './components/VistaCorrea';
 import FormularioInspeccion  from './components/FormularioInspeccion';
 import GeneradorInforme      from './components/GeneradorInforme';
-
-// Modos posibles de la vista de correa
-// 'formulario' -> FormularioInspeccion (nuevo flujo)
-// 'dashboard'  -> VistaCorrea (vista de datos)
-// null         -> VistaInicio
+import VistaGerencial        from './components/VistaGerencial';
+import PanelSoporte          from './components/PanelSoporte';
 
 function App() {
+  // ── Todos los hooks SIEMPRE al tope, sin condicionales ───
+  const [usuario,       setUsuario]       = useState(null);
   const [data,          setData]          = useState(INITIAL_DATA);
-  const [config,        setConfig]        = useState(INITIAL_CONFIG);
+  const [config,        setConfig]        = useState(INITIAL_CONFIG); // eslint-disable-line no-unused-vars
   const [correaActiva,  setCorreaActiva]  = useState(null);
-  const [modoCorrea,    setModoCorrea]    = useState(null); // 'formulario' | 'dashboard'
+  const [modoCorrea,    setModoCorrea]    = useState(null);
   const [informeConfig, setInformeConfig] = useState(null);
+
+  // ── Auth ─────────────────────────────────────────────────
+  const handleLogin  = useCallback((u) => setUsuario(u), []);
+  const handleLogout = useCallback(() => {
+    setUsuario(null);
+    setCorreaActiva(null);
+    setModoCorrea(null);
+  }, []);
 
   // ── Navegación ────────────────────────────────────────────
   const handleSelectCorrea = useCallback((correa) => {
     setCorreaActiva(correa);
-    // Si ya tiene datos de inspección real, va al dashboard
-    // Si no, abre el formulario directamente
     const correaEnData = data.correas.find(c => c.id === correa.id);
     const tieneInspecciones = (correaEnData?.historial || []).length > 0;
     setModoCorrea(tieneInspecciones ? 'dashboard' : 'formulario');
@@ -42,74 +48,68 @@ function App() {
     setModoCorrea(null);
   }, []);
 
-  const handleNuevaInspeccion = useCallback(() => {
-    setModoCorrea('formulario');
-  }, []);
+  const handleNuevaInspeccion = useCallback(() => setModoCorrea('formulario'), []);
 
-  // ── Ingreso de datos desde el formulario ─────────────────
+  // ── Ingreso de datos ─────────────────────────────────────
   const handleIngresarDatos = useCallback((registro) => {
     setData(prev => {
       const correas = prev.correas.map(c => {
         if (c.id !== registro.correaId) return c;
-
-        // Los datos actuales pasan al historial
         const historialAnterior = c.historial || [];
         const entradaHistorial = {
-          id:            `insp-${Date.now()}`,
-          timestamp:     registro.timestamp,
-          fechaHora:     registro.fechaHora,
-          fecha:         registro.fecha,
-          hora:          registro.hora,
-          responsable:   registro.responsable,
-          responsable2:  registro.responsable2,
-          ordenTrabajo:  registro.ordenTrabajo,
+          id:                `insp-${Date.now()}`,
+          timestamp:         registro.timestamp,
+          fechaHora:         registro.fechaHora,
+          fecha:             registro.fecha,
+          hora:              registro.hora,
+          responsable:       registro.responsable,
+          responsable2:      registro.responsable2,
+          ordenTrabajo:      registro.ordenTrabajo,
           tipoMantenimiento: registro.tipoMantenimiento,
-          observaciones: registro.observaciones,
-          avisos:        registro.avisos,
-          secciones:     registro.secciones, // datos raw del formulario
-          items:         registro.items,      // datos convertidos al formato dashboard
+          observaciones:     registro.observaciones,
+          avisos:            registro.avisos,
+          secciones:         registro.secciones,
+          items:             registro.items,
         };
-
         return {
           ...c,
-          // Dashboard se actualiza con los nuevos datos
           items:            registro.items,
           ultimaInspeccion: registro.fecha,
           responsable:      registro.responsable || c.responsable,
-          // Historial acumula todas las inspecciones
-          historial: [entradaHistorial, ...historialAnterior],
+          historial:        [entradaHistorial, ...historialAnterior],
         };
       });
       return { ...prev, correas };
     });
-
-    // Actualiza correaActiva con los nuevos datos
-    setCorreaActiva(prev => {
-      const actualizada = data.correas.find(c => c.id === registro.correaId);
-      return { ...prev, items: registro.items };
-    });
+    setCorreaActiva(prev => ({ ...prev, items: registro.items }));
     setModoCorrea('dashboard');
-  }, [data.correas]);
-
-  // ── Informe ──────────────────────────────────────────────
-  const handleInformeGlobal = useCallback(() => {
-    setInformeConfig({ correas: data.correas });
-  }, [data.correas]);
-
-  const handleInformeUnitario = useCallback((correa) => {
-    setInformeConfig({ correas: [correa] });
   }, []);
 
-  const handleCerrarInforme = useCallback(() => setInformeConfig(null), []);
+  // ── Informe ──────────────────────────────────────────────
+  const handleInformeGlobal   = useCallback(() => setInformeConfig({ correas: data.correas }), [data.correas]);
+  const handleInformeUnitario = useCallback((correa) => setInformeConfig({ correas: [correa] }), []);
+  const handleCerrarInforme   = useCallback(() => setInformeConfig(null), []);
 
-  // ── Título del topbar ────────────────────────────────────
+  // ── Return condicional DESPUÉS de todos los hooks ────────
+  if (!usuario) return <Login onLogin={handleLogin} />;
+
+  // ── Vista gerencial (solo KPIs, sin navegación de correas) ──
+  if (usuario.rol === 'gerente') {
+    return <VistaGerencial data={data} usuario={usuario} onLogout={handleLogout} />;
+  }
+
+  // ── TODO: Panel soporte ──────────────────────────────────
+  if (usuario.rol === 'soporte') {
+    return <PanelSoporte usuario={usuario} onLogout={handleLogout} />;
+  }
+
+  // ── Cálculos derivados ───────────────────────────────────
   const topbarTitle = correaActiva
     ? `${correaActiva.codigo} — ${correaActiva.nombre}`
     : 'INSPECCIÓN CINTAS TRANSPORTADORAS';
 
   const totalPolines = data.correas.reduce((acc, c) => acc + (c.numEstaciones * 3), 0);
 
-  // La correa activa siempre viene con los datos más actuales de data
   const correaConDatos = correaActiva
     ? (data.correas.find(c => c.id === correaActiva.id) || correaActiva)
     : null;
@@ -122,6 +122,8 @@ function App() {
           totalPolines={totalPolines}
           onMenuToggle={() => {}}
           hideHamburger
+          usuario={usuario}
+          onLogout={handleLogout}
           extraRight={
             !correaActiva && (
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -135,7 +137,6 @@ function App() {
         />
 
         <main className="content-area">
-          {/* Vista inicio */}
           {!correaActiva && (
             <VistaInicio
               correas={data.correas}
@@ -143,7 +144,6 @@ function App() {
             />
           )}
 
-          {/* Formulario de inspección */}
           {correaActiva && modoCorrea === 'formulario' && (
             <FormularioInspeccion
               correa={correaConDatos}
@@ -152,7 +152,6 @@ function App() {
             />
           )}
 
-          {/* Dashboard de correa */}
           {correaActiva && modoCorrea === 'dashboard' && (
             <VistaCorrea
               correa={correaConDatos}
@@ -164,7 +163,6 @@ function App() {
         </main>
       </div>
 
-      {/* Generador de Informe */}
       {informeConfig && (
         <GeneradorInforme
           data={data}

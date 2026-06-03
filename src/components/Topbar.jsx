@@ -20,7 +20,7 @@ function CodelcoLogo() {
   );
 }
 
-export default function Topbar({ title, totalPolines, onMenuToggle, hideHamburger, extraRight }) {
+export default function Topbar({ title, totalPolines, onMenuToggle, hideHamburger, extraRight, usuario, onLogout }) {
   const t = useClock();
   const pad = n => String(n).padStart(2, '0');
   const timeStr = `${pad(t.getHours())}:${pad(t.getMinutes())}:${pad(t.getSeconds())}`;
@@ -47,6 +47,22 @@ export default function Topbar({ title, totalPolines, onMenuToggle, hideHamburge
         <span className="clock-display">
           {timeStr}<span className="clock-date"> | {dateStr}</span>
         </span>
+        {usuario && (
+          <span style={{ display:'flex', alignItems:'center', gap:8, color:'rgba(255,255,255,0.75)', fontFamily:'var(--font-ui)', fontSize:14 }}>
+            <i className="bi bi-person-circle" style={{ fontSize:16 }}/>
+            {usuario.nombre}
+            <span style={{ background:'rgba(196,122,46,0.25)', color:'#c47a2e', border:'1px solid rgba(196,122,46,0.4)', borderRadius:4, padding:'2px 8px', fontFamily:'var(--font-mono)', fontSize:10, fontWeight:700, letterSpacing:1, textTransform:'uppercase' }}>
+              {usuario.rol}
+            </span>
+            <button
+              onClick={onLogout}
+              title="Cerrar sesión"
+              style={{ background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.2)', color:'rgba(255,255,255,0.6)', borderRadius:4, width:30, height:30, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15, transition:'all 0.2s' }}
+            >
+              <i className="bi bi-box-arrow-right"/>
+            </button>
+          </span>
+        )}
         <span className="live-badge">
           <span className="pulse-dot pulse-dot--sm" />
           <span className="live-text">LIVE</span>
