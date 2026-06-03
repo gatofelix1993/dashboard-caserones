@@ -333,7 +333,7 @@ function ItemInspeccion({ itemKey, config, data, correa, onFotoAdd, onNotaChange
 }
 
 // ── Vista principal ───────────────────────────────────────────
-export default function VistaCorrea({ correa, onBack, onUpdate, onNuevaInspeccion, onInformeUnitario }) {
+export default function VistaCorrea({ correa, onBack, onUpdate, onNuevaInspeccion, onInformeUnitario, soloLectura = false }) {
   const [items, setItems] = useState(() => ({ ...correa.items }));
   const [historialAbierto, setHistorialAbierto] = useState(null); // inspeccion del historial en vista detalle
 
@@ -433,16 +433,18 @@ export default function VistaCorrea({ correa, onBack, onUpdate, onNuevaInspeccio
             ))}
           </div>
 
-          {/* Boton Ingresar Datos + Nueva Inspeccion */}
-          <div className="informe-btn-area">
-            <button
-              className="btn-nueva-inspeccion"
-              onClick={onNuevaInspeccion}
-            >
-              <i className="bi bi-pencil-square me-2"/>
-              Ingresar Datos
-            </button>
-          </div>
+          {/* Boton Ingresar Datos — solo visible para inspector */}
+          {!soloLectura && onNuevaInspeccion && (
+            <div className="informe-btn-area">
+              <button
+                className="btn-nueva-inspeccion"
+                onClick={onNuevaInspeccion}
+              >
+                <i className="bi bi-pencil-square me-2"/>
+                Ingresar Datos
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
