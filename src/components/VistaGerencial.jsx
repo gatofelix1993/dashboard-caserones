@@ -94,9 +94,9 @@ export default function VistaGerencial({ data, usuario, onLogout }) {
 // ── Estilos ───────────────────────────────────────────────────
 const S = {
   shell: { display:'flex', flexDirection:'column', minHeight:'100dvh', background:'var(--bg-primary)' },
-  topbar: { height:68, background:'#0d2240', borderBottom:'3px solid #c0272d', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 24px', gap:10, flexShrink:0, boxShadow:'0 2px 8px rgba(0,0,0,0.18)', flexWrap:'wrap' },
+  topbar: { minHeight:68, background:'#0d2240', borderBottom:'3px solid #c0272d', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'clamp(0px,0px,0px) clamp(12px,3vw,24px)', gap:10, flexShrink:0, boxShadow:'0 2px 8px rgba(0,0,0,0.18)', flexWrap:'wrap' },
   topbarLeft:  { display:'flex', alignItems:'center', gap:10 },
-  topbarTitle: { fontFamily:"'Orbitron',monospace", fontSize:16, fontWeight:900, letterSpacing:3, color:'#c47a2e' },
+  topbarTitle: { fontFamily:"'Orbitron',monospace", fontSize:'clamp(12px,2vw,16px)', fontWeight:900, letterSpacing:3, color:'#c47a2e' },
   topbarSep:   { color:'rgba(255,255,255,0.25)', fontSize:18 },
   topbarSub:   { fontFamily:"'Rajdhani',sans-serif", fontSize:16, fontWeight:700, color:'rgba(255,255,255,0.8)' },
   topbarRight: { display:'flex', alignItems:'center', gap:10, flexWrap:'wrap' },
@@ -109,5 +109,5 @@ const S = {
   rolBadge:    { background:'rgba(196,122,46,0.25)', color:'#c47a2e', border:'1px solid rgba(196,122,46,0.4)', borderRadius:4, padding:'2px 8px', fontFamily:"'Share Tech Mono',monospace", fontSize:10, fontWeight:700, letterSpacing:1, textTransform:'uppercase' },
   btnLogout:   { background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.2)', color:'rgba(255,255,255,0.6)', borderRadius:4, width:32, height:32, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 },
   btnBack:     { background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.2)', color:'rgba(255,255,255,0.8)', borderRadius:4, width:32, height:32, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 },
-  main:  { flex:1, overflowY:'auto', padding:'20px 24px' },
+  main:  { flex:1, overflowY:'auto', padding:'clamp(12px,2vw,20px) clamp(12px,3vw,24px)' },
 };

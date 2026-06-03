@@ -1,0 +1,309 @@
+/* ============================================================
+   responsive.css — SCADA-MINE · Caserones · Lundin Mining
+   Breakpoints:
+     xs:  <480px   (mobile portrait)
+     sm:  480-767px (mobile landscape / small tablet)
+     md:  768-1023px (tablet)
+     lg:  1024-1439px (laptop)
+     xl:  1440-2559px (desktop)
+     2xl: ≥2560px  (4K / ultrawide)
+   ============================================================ */
+
+/* ── BASE FLUID ── */
+html { font-size: 16px; }
+@media (max-width: 480px)  { html { font-size: 14px; } }
+@media (min-width: 2560px) { html { font-size: 18px; } }
+
+/* ================================================================
+   TOPBAR GERENCIAL / SOPORTE (estilos inline en componentes)
+   Clases auxiliares para que el topbar se adapte
+================================================================ */
+.resp-topbar {
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(12px, 3vw, 24px);
+  gap: 10px;
+  flex-wrap: wrap;
+  min-height: var(--topbar-h);
+}
+
+/* En mobile el topbar puede necesitar 2 líneas */
+@media (max-width: 640px) {
+  .resp-topbar { height: auto; padding: 10px 14px; }
+}
+
+/* Ocultar badges de estado en topbar en móvil muy pequeño */
+.resp-stat-badges {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+@media (max-width: 640px) {
+  .resp-stat-badges { display: none; }
+}
+
+/* ================================================================
+   LOGIN
+================================================================ */
+.login-shell {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 4vw, 32px);
+}
+.login-card {
+  width: 100%;
+  max-width: min(420px, 100%);
+}
+.login-demo-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+@media (min-width: 480px) {
+  .login-demo-grid { flex-direction: row; flex-wrap: wrap; }
+  .login-demo-grid > * { flex: 1; min-width: 140px; }
+}
+
+/* ================================================================
+   PANEL SOPORTE — form grid y tabla
+================================================================ */
+.soporte-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) {
+  .soporte-form-grid { grid-template-columns: 1fr; }
+}
+
+.soporte-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .soporte-kpi-row { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .soporte-kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+.soporte-filtros {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ================================================================
+   VISTA GERENCIAL — KPI row y charts
+================================================================ */
+.gerencial-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@media (max-width: 900px) {
+  .gerencial-kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .gerencial-kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+.gerencial-charts-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.gerencial-chart-card {
+  flex: 1;
+  min-width: clamp(260px, 40%, 400px);
+}
+@media (max-width: 640px) {
+  .gerencial-chart-card { min-width: 100%; }
+}
+
+.gerencial-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+/* ================================================================
+   FLUJO PROCESO (SVG)
+================================================================ */
+.flujo-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Fondo sutil para indicar que es scrolleable en mobile */
+}
+.flujo-wrapper svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 1000px;
+  width: 100%;
+  min-width: 700px;
+}
+/* En 4K permitir crecer más */
+@media (min-width: 2560px) {
+  .flujo-wrapper svg { max-width: 1100px; min-width: unset; }
+}
+/* Hint visual de scroll en mobile */
+@media (max-width: 700px) {
+  .flujo-wrapper {
+    padding-bottom: 6px;
+    /* sombra lateral derecha indica que hay más contenido */
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  }
+}
+
+/* ================================================================
+   VISTA INICIO — banner y tabs
+================================================================ */
+@media (max-width: 480px) {
+  .inicio-banner { flex-direction: column; align-items: flex-start; padding: 14px 16px; }
+  .inicio-banner-title { font-size: 13px; }
+  .inicio-tabs { overflow-x: auto; }
+  .inicio-tab { padding: 8px 14px; font-size: 11px; }
+  .area-pill { font-size: 10px; }
+}
+@media (min-width: 2560px) {
+  .vista-inicio { padding: 32px 48px; }
+  .correa-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+}
+
+/* ================================================================
+   VISTA CORREA — layout 2 columnas
+================================================================ */
+/* Ya cubierto en App.css con @media (max-width: 860px) */
+
+/* En 4K la col izquierda puede ser más ancha */
+@media (min-width: 2560px) {
+  .correa-col-left { width: 380px; }
+  .insp-item-label { font-size: 20px; }
+}
+
+/* ================================================================
+   MODALES
+================================================================ */
+@media (max-width: 600px) {
+  .modal-datos-entrada { max-height: 95vh; border-radius: 12px 12px 0 0; }
+  .modal-de-steps { overflow-x: auto; gap: 4px; padding: 10px 14px; }
+  .modal-de-step-label { display: none; }
+  .modal-de-body { padding: 14px; }
+}
+
+/* ================================================================
+   FORMULARIO DE INSPECCIÓN — ya mobile-first en App.css
+================================================================ */
+@media (min-width: 2560px) {
+  .fi-wrapper { max-width: 900px; }
+  .fi-sc-titulo { font-size: 20px; }
+  .fi-btn-ingresar { font-size: 22px; padding: 22px; }
+}
+
+/* ================================================================
+   TOPBAR PRINCIPAL (scada-topbar)
+================================================================ */
+@media (max-width: 480px) {
+  .scada-topbar { padding: 0 12px; }
+  .topbar-title { max-width: 120px; }
+  .btn-informe-global .btn-import-text { display: none; }
+  .btn-datos-entrada .btn-import-text { display: none; }
+}
+@media (min-width: 2560px) {
+  .scada-topbar { height: 80px; padding: 0 48px; }
+  .topbar-title { font-size: 16px; }
+  .clock-display { font-size: 18px; }
+}
+
+/* ================================================================
+   HISTORIAL
+================================================================ */
+@media (max-width: 600px) {
+  .historial-banner { flex-direction: column; }
+  .historial-banner-right { flex-direction: row; gap: 16px; }
+  .historial-kpi-val { font-size: 20px; }
+}
+
+/* ================================================================
+   CHARTS (Chart.js wrappers)
+================================================================ */
+.chart-canvas-wrap { position: relative; }
+.chart-canvas-wrap--bar   { height: clamp(180px, 25vh, 280px); }
+.chart-canvas-wrap--donut { height: clamp(160px, 22vh, 240px); }
+
+@media (max-width: 480px) {
+  .chart-canvas-wrap--bar   { height: 160px; }
+  .chart-canvas-wrap--donut { height: 150px; }
+}
+@media (min-width: 2560px) {
+  .chart-canvas-wrap--bar   { height: 380px; }
+  .chart-canvas-wrap--donut { height: 340px; }
+}
+
+/* ================================================================
+   TABLA GENERAL — padding adaptativo
+================================================================ */
+@media (max-width: 480px) {
+  .historial-table td,
+  .historial-table th,
+  .schema-table td,
+  .schema-table th,
+  .preview-table td,
+  .preview-table th { padding: 6px 8px; font-size: 11px; }
+}
+@media (min-width: 2560px) {
+  .historial-table td,
+  .historial-table th { padding: 14px 20px; font-size: 16px; }
+}
+
+/* ================================================================
+   CHIPS Y BADGES — escala en 4K
+================================================================ */
+@media (min-width: 2560px) {
+  .chip       { font-size: 16px; padding: 6px 16px; }
+  .badge-mini { font-size: 14px; padding: 5px 12px; }
+}
+
+/* ================================================================
+   CONTENT AREA — padding adaptativo
+================================================================ */
+.content-area-padded {
+  padding: clamp(12px, 2.5vw, 28px) clamp(12px, 3vw, 32px);
+}
+@media (min-width: 2560px) {
+  .content-area-padded { padding: 40px 64px; }
+}
+
+/* ================================================================
+   UTILITY — ocultar/mostrar por breakpoint
+================================================================ */
+.hide-xs { display: block; }
+.hide-sm { display: block; }
+@media (max-width: 480px) { .hide-xs { display: none !important; } }
+@media (max-width: 767px) { .hide-sm { display: none !important; } }
+.show-xs-only { display: none; }
+@media (max-width: 480px) { .show-xs-only { display: block !important; } }
+
+/* ================================================================
+   SCROLLBAR — más delgada en mobile
+================================================================ */
+@media (max-width: 767px) {
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+}
+
+/* ================================================================
+   TOUCH — targets mínimos de 44px en mobile
+================================================================ */
+@media (max-width: 767px) {
+  button, [role="button"], .correa-card, .fi-seccion-card {
+    min-height: 44px;
+  }
+  .estado-btn { min-height: 36px; min-width: 60px; }
+  .fi-toggle  { width: 48px; height: 48px; }
+}
