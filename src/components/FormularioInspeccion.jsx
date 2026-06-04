@@ -120,9 +120,9 @@ const SECCIONES_FORMULARIO = [
   },
 ];
 
-// ── Fila vacia para sub-tabla de polines ─────────────────────
-function filaVacia() {
-  return { numero: '', izquierdo: false, central: false, derecho: false, detalle: '', fotos: [] };
+// ── Fila para sub-tabla de polines (número fijo, no editable) ─
+function filaConNumero(n) {
+  return { numero: n, izquierdo: false, central: false, derecho: false, detalle: '', fotos: [] };
 }
 
 // ── Estado inicial ────────────────────────────────────────────
@@ -131,10 +131,13 @@ function crearEstadoInicial(correa) {
 
   SECCIONES_FORMULARIO.forEach(sec => {
     if (sec.tipo === 'polines') {
-      // *** CORRECCION: cada sub-item tiene su propio array de filas INDEPENDIENTE ***
+      // Filas fijas: una por cada estación de la correa, numeradas 1..N
       const subItemsData = {};
       sec.subItems.forEach(si => {
-        subItemsData[si.id] = Array.from({ length: 5 }, () => filaVacia());
+        subItemsData[si.id] = Array.from(
+          { length: correa.numEstaciones },
+          (_, i) => filaConNumero(i + 1)
+        );
       });
       secciones[sec.id] = {
         subItems: subItemsData,
@@ -313,26 +316,12 @@ function FotosSeccion({ fotos, onChange, maxFotos = 3 }) {
 }
 
 // ── Seccion de Polines ────────────────────────────────────────
-// Cada sub-item (1.1, 1.2, ...) maneja su propio array de filas
+// Cada sub-item tiene filas fijas (una por estación). El número
+// de estación es solo lectura — no se puede agregar ni eliminar.
 function SeccionPolines({ secDef, estado, onChange }) {
-
-  const addFila = (siId) => {
-    onChange({
-      ...estado,
-      subItems: {
-        ...estado.subItems,
-        [siId]: [...(estado.subItems[siId] || []), filaVacia()],
-      },
-    });
-  };
 
   const updateFila = (siId, idx, campo, val) => {
     const filas = estado.subItems[siId].map((f, i) => i === idx ? { ...f, [campo]: val } : f);
-    onChange({ ...estado, subItems: { ...estado.subItems, [siId]: filas } });
-  };
-
-  const deleteFila = (siId, idx) => {
-    const filas = estado.subItems[siId].filter((_, i) => i !== idx);
     onChange({ ...estado, subItems: { ...estado.subItems, [siId]: filas } });
   };
 
@@ -361,21 +350,15 @@ function SeccionPolines({ secDef, estado, onChange }) {
                     <th className="fi-th-check">Cen.</th>
                     <th className="fi-th-check">Der.</th>
                     <th>Detalle hallazgo</th>
-                    <th className="fi-th-del"></th>
                     <th className="fi-th-foto">Foto</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filas.map((fila, idx) => (
                     <tr key={idx} className={fila.izquierdo || fila.central || fila.derecho ? 'fi-tr-falla' : ''}>
+                      {/* Número de estación: fijo, solo lectura */}
                       <td>
-                        <input
-                          className="fi-input-num"
-                          type="text"
-                          placeholder="—"
-                          value={fila.numero}
-                          onChange={e => updateFila(si.id, idx, 'numero', e.target.value)}
-                        />
+                        <span className="fi-num-fijo">{fila.numero}</span>
                       </td>
                       {['izquierdo', 'central', 'derecho'].map(campo => (
                         <td key={campo} className="fi-td-check">
@@ -398,11 +381,6 @@ function SeccionPolines({ secDef, estado, onChange }) {
                           onChange={e => updateFila(si.id, idx, 'detalle', e.target.value)}
                         />
                       </td>
-                      <td className="fi-td-del">
-                        <button className="fi-fila-del" onClick={() => deleteFila(si.id, idx)}>
-                          <i className="bi bi-trash3"/>
-                        </button>
-                      </td>
                       <td className="fi-td-foto">
                         <FotoFila
                           fotos={fila.fotos || []}
@@ -415,9 +393,7 @@ function SeccionPolines({ secDef, estado, onChange }) {
               </table>
             </div>
 
-            <button className="fi-btn-add-fila" onClick={() => addFila(si.id)}>
-              <i className="bi bi-plus-circle me-1"/>Agregar estacion
-            </button>
+            {/* Sin botón de agregar — lista fija según numEstaciones de la correa */}
           </div>
         );
       })}
