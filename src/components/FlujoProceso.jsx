@@ -76,17 +76,7 @@ function NodoCorrea({ correa, x, y, w=220, critica=false, extra='', onClick }) {
         {(extra||'').slice(0,16)}
       </text>}
 
-      {/* Estado */}
-      {(() => {
-        const ey = ancho ? y+54 : y+55;
-        return <>
-          <circle cx={x+13} cy={ey} r="4" fill={col}/>
-          <text x={x+21} y={ey} dominantBaseline="central"
-            fontFamily={FU} fontSize="11" fontWeight="700" fill={col}>{sl(est)}</text>
-        </>;
-      })()}
-
-      {/* Badges — en 2 filas si no caben en una */}
+      {/* Fila 3: estado + badges (con salto de línea automático) */}
       {(()=>{
         const by1 = y+54;
         const by2 = y+70;
@@ -362,6 +352,12 @@ function FlujoProcesaMobile({ correas, onSelectCorrea }) {
       correas:[get('7200-CV-001')].filter(Boolean),
     },
     {
+      titulo:'7200-FE-001 y FE-002 — Fierro esponja',
+      subtitulo:'Área 7200 · 15 est. c/u',
+      color:'#c0272d',
+      correas:[get('7200-FE-001'),get('7200-FE-002')].filter(Boolean),
+    },
+    {
       titulo:'Concentraducto · Punta Chungo',
       subtitulo:'120 km · exportación a Japón',
       color:'#5a7080', correas:[],
@@ -468,12 +464,12 @@ function FlujoProcesaSVG({ correas, onSelectCorrea }) {
     mina:55, cv2100:130, chancado:222, split:314,
     molienda:450, cv021:452, cv022:526, harnero:620,
     par:694, flotacion:820, cv5300:910, separacion:1020,
-    cv7200:1094, concentra:1186,
+    cv7200:1094, concentra:1310,
   };
 
   return (
     <div style={{width:'100%', overflowX:'auto', WebkitOverflowScrolling:'touch'}}>
-      <svg width="100%" viewBox="0 0 900 1310" style={{display:'block',margin:'0 auto',minWidth:700,maxWidth:1000}}>
+      <svg width="100%" viewBox="0 0 900 1480" style={{display:'block',margin:'0 auto',minWidth:700,maxWidth:1000}}>
         <defs>
           <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
             <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -621,18 +617,35 @@ function FlujoProcesaSVG({ correas, onSelectCorrea }) {
         {/* 12. 7200-CV-001 */}
         <NodoCorrea correa={get('7200-CV-001')} x={PX} y={Y.cv7200} w={PW} extra="CV · Alerta · mayor longitud · Area 7200"
           onClick={()=>onSelectCorrea(get('7200-CV-001'))}/>
-        <line x1={CC} y1={Y.cv7200+H72} x2={CC} y2={Y.concentra-2} stroke="#bbb" strokeWidth="1.5" markerEnd="url(#arr)"/>
+
+        {/* Bifurcación 7200-FE-001 y FE-002 en paralelo */}
+        <line x1={CC} y1={Y.cv7200+H72} x2={CC} y2={Y.cv7200+H72+18} stroke="#bbb" strokeWidth="1.5"/>
+        <line x1={CV53_LX+CV53_W/2} y1={Y.cv7200+H72+18} x2={CV53_RX+CV53_W/2} y2={Y.cv7200+H72+18} stroke="#bbb" strokeWidth="1.5"/>
+        <line x1={CV53_LX+CV53_W/2} y1={Y.cv7200+H72+18} x2={CV53_LX+CV53_W/2} y2={Y.cv7200+H72+34} stroke="#bbb" strokeWidth="1.5" markerEnd="url(#arr)"/>
+        <line x1={CV53_RX+CV53_W/2} y1={Y.cv7200+H72+18} x2={CV53_RX+CV53_W/2} y2={Y.cv7200+H72+34} stroke="#bbb" strokeWidth="1.5" markerEnd="url(#arr)"/>
+
+        <NodoCorrea correa={get('7200-FE-001')} x={CV53_LX} y={Y.cv7200+H72+36} w={CV53_W} extra="FE · CRÍTICO · Area 7200"
+          onClick={()=>onSelectCorrea(get('7200-FE-001'))}/>
+        <NodoCorrea correa={get('7200-FE-002')} x={CV53_RX} y={Y.cv7200+H72+36} w={CV53_W} extra="FE · Alerta · Area 7200"
+          onClick={()=>onSelectCorrea(get('7200-FE-002'))}/>
+
+        {/* Convergencia FE 7200 → Concentraducto */}
+        <line x1={CV53_LX+CV53_W/2} y1={Y.cv7200+H72+36+H72} x2={CV53_LX+CV53_W/2} y2={Y.concentra-18} stroke="#bbb" strokeWidth="1.5"/>
+        <line x1={CV53_LX+CV53_W/2} y1={Y.concentra-18} x2={CC} y2={Y.concentra-18} stroke="#bbb" strokeWidth="1.5"/>
+        <line x1={CV53_RX+CV53_W/2} y1={Y.cv7200+H72+36+H72} x2={CV53_RX+CV53_W/2} y2={Y.concentra-18} stroke="#bbb" strokeWidth="1.5"/>
+        <line x1={CV53_RX+CV53_W/2} y1={Y.concentra-18} x2={CC} y2={Y.concentra-18} stroke="#bbb" strokeWidth="1.5"/>
+        <line x1={CC} y1={Y.concentra-18} x2={CC} y2={Y.concentra-2} stroke="#bbb" strokeWidth="1.5" markerEnd="url(#arr)"/>
 
         {/* 13. Concentraducto */}
         <NodoProceso x={PX} y={Y.concentra} w={PW} titulo="Concentraducto · Punta Chungo"
           sub="120 km · exportación a Japón"/>
 
         {/* Footer */}
-        <line x1="40" y1="1252" x2="860" y2="1252" stroke="#ddd" strokeWidth="0.8"/>
-        <text x={CC} y="1268" textAnchor="middle" fontFamily={FU} fontSize="12" fill="#8a9aaa">
+        <line x1="40" y1="1422" x2="860" y2="1422" stroke="#ddd" strokeWidth="0.8"/>
+        <text x={CC} y="1438" textAnchor="middle" fontFamily={FU} fontSize="12" fill="#8a9aaa">
           {`Total sistema: ${totEst} estaciones · semana 22 · 28-05-2026`}
         </text>
-        <text x={CC} y="1286" textAnchor="middle" fontFamily={FU} fontSize="12" fill="#8a9aaa">
+        <text x={CC} y="1456" textAnchor="middle" fontFamily={FU} fontSize="12" fill="#8a9aaa">
           {[totCrit>0&&`${totCrit} correas críticas`,totAlt>0&&`${totAlt} en alerta`,'Pastillas = Nº estaciones'].filter(Boolean).join(' · ')}
         </text>
       </svg>

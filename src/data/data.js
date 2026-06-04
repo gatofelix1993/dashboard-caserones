@@ -112,8 +112,12 @@ export const INITIAL_DATA = {
       id: '2200-FE-001', codigo: '2200-FE-001', nombre: 'Correa FE-001',
       area: '2200', tipo: 'FE', descripcion: 'Correa fierro esponja 1, area 2200',
       color: COLORES.cobreFE2, ultimaInspeccion: '2026-05-28', responsable: 'P. Araya',
-      numEstaciones: 8, estaciones: generarEstaciones(8),
-      items: generarItemsInspeccion({ contrapeso: { estado: 'ok', notas: 'N/A.', fotos: [] } }),
+      numEstaciones: 8, estaciones: generarEstaciones(8, ['3c', '5c']),
+      items: generarItemsInspeccion({
+        polines:    { estado: 'critico', notas: 'Polin carga central 3 y 5 TRABADOS. Acumulacion material retorno 1-4.', fotos: [] },
+        cinta:      { estado: 'critico', notas: 'Desgaste cubierta carga llegando a 2a tela sector centro. Aviso 10345790.', fotos: [] },
+        contrapeso: { estado: 'ok', notas: 'N/A.', fotos: [] },
+      }),
     },
     {
       id: '2200-FE-002', codigo: '2200-FE-002', nombre: 'Correa FE-002',
